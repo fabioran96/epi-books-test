@@ -1,35 +1,42 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { useState } from 'react';
+import './index.css';
+import { Container, Row, Col } from 'react-bootstrap';
+import MyNav from './components/myNav';
+import MyFooter from './components/myFooter';
+import Welcome from './components/welcome';
+import BookList from './components/BookList';
+import CommentArea from './components/CommentArea';
+import scifiBooks from './data/scifi.json';
 
-function App() {
-  const [count, setCount] = useState(0)
+const App = () => {
+  const [selectedBookAsin, setSelectedBookAsin] = useState(null);
+
+  const handleBookSelect = (asin) => {
+    setSelectedBookAsin(asin);
+  };
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <MyNav />
+      <Container>
+        <Welcome />
+        <Row>
+          <Col md={8}>
+            <BookList books={scifiBooks} onBookSelect={handleBookSelect} />
+          </Col>
+          <Col md={4}>
+            {selectedBookAsin ? (
+              <CommentArea asin={selectedBookAsin} />
+            ) : (
+              <div>Select a book to see comments</div>
+            )}
+          </Col>
+        </Row>
+      </Container>
+      <MyFooter />
     </>
-  )
-}
+  );
+};
 
-export default App
+export default App;
+
